@@ -1,33 +1,42 @@
-# LedgerMind — Accounts Payable Agent
+# LedgerMind
 
-LedgerMind is a memory-enabled AP decision agent built for the Hindsight hackathon. The default workspace is designed around two judge-visible surfaces: **Agent Trace** and **Agent Decision**.
+### A memory-augmented Accounts Payable agent powered by Hindsight Cloud.
 
-## Core workflow
+LedgerMind checks invoices against current AP controls **and remembers what happened with the vendor before**.
 
-Invoice → Purchase Order → Goods Receipt → Hindsight Recall → Risk Evaluation → Controlled Decision → Hindsight Retain
+> **Automate confidence. Escalate uncertainty. Block high-risk changes.**
 
-## Four behaviors
+## What problem does it solve?
 
-1. **Cold-start** — a supplier with no prior AP history is routed to human verification.
-2. **Recurring exception** — a known discrepancy recalls a previous resolution.
-3. **Bank-account surprise** — fourteen historical payments to one beneficiary establish a baseline; a first-time beneficiary change triggers a payment hold.
-4. **Learned vendor** — a clean invoice from an established supplier can be auto-approved when current controls pass.
+Traditional AP automation often treats every invoice as a new decision.
 
-## Data
+LedgerMind adds **persistent vendor memory** so past payments, exceptions, resolutions, and verified bank details can influence today's decision.
 
-The project uses realistic **synthetic** AP data: 25 vendors, 100 invoices, purchase orders, goods receipts, vendor history and audit events.
+## How does Hindsight fit?
 
-## Hindsight
+Hindsight is LedgerMind's long-term memory.
 
-The server uses the official TypeScript Hindsight client for `recall` and `retain`. Historical vendor context is kept separate from current decision/audit events, and the UI displays only a focused set of relevant memories.
+**Recall** relevant vendor history before a decision → **Decide** using current evidence + memory → **Retain** important events for future decisions.
 
-## Run
+## 4 Demo Scenarios
 
-Create `.env` from `.env.example` and add your Hindsight Cloud API key. Then:
+| Scenario | Decision |
+|---|---|
+| **Cold Start** — no vendor history | HUMAN REVIEW |
+| **Recurring Exception** — previous discrepancy recalled | EXCEPTION |
+| **Learned Vendor** — established history + clean controls | AUTO-APPROVE |
+| **Bank-Account Surprise** — previous beneficiary vs new account | PAYMENT BLOCKED |
 
-```bash
-npm install
-npm run dev
-```
+## Architecture
 
-Do not commit `.env` or API keys.
+```text
+React UI
+   ↓
+Express Backend
+   ├── Invoice / PO / GRN
+   └── Hindsight Cloud
+          Recall ↕ Retain
+   ↓
+AP Decision Engine
+   ↓
+Approve / Exception / Review / Block
