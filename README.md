@@ -40,3 +40,8 @@ Express Backend
 AP Decision Engine
    ↓
 Approve / Exception / Review / Block
+## Run
+
+```bash
+npm install
+npm run dev
